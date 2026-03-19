@@ -4,8 +4,7 @@ from src.abstract_api import BaseAPI
 
 class OpenSkyAPI(BaseAPI):
     """
-    Класс для работы с OpenSky Network API.
-    Получает данные о самолётах в заданной области.
+    Класс для работы с OpenSky Network API
     """
 
     BASE_URL = "https://opensky-network.org/api/states/all"
@@ -16,22 +15,12 @@ class OpenSkyAPI(BaseAPI):
     def get_country_coordinates(self, country_name: str) -> dict:
         """
         Заглушка (для совместимости с BaseAPI).
-        OpenSky не умеет искать координаты стран.
         """
         raise NotImplementedError("OpenSkyAPI не поддерживает поиск координат стран")
 
     def get_aircraft_in_area(self, south: float, north: float, west: float, east: float) -> list:
         """
-        Получает список самолётов в заданной прямоугольной области.
-
-        Args:
-            south, north, west, east: координаты bounding box
-
-        Returns:
-            list: Список самолётов (сырые данные)
-
-        Raises:
-            requests.RequestException: при ошибке запроса
+        Получает список самолётов в заданной прямоугольной области
         """
         params = {
             "lamin": south,

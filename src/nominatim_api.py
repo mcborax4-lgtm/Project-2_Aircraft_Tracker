@@ -39,6 +39,6 @@ class NominatimAPI(BaseAPI):
 
     def get_aircraft_in_area(self, south: float, north: float, west: float, east: float) -> list:
         """
-        Заглушка (для совместимости с BaseAPI).
+        Заглушка (для совместимости с BaseAPI)
         """
         raise NotImplementedError("NominatimAPI не поддерживает поиск самолётов")
