@@ -1,4 +1,5 @@
 import pytest
+
 from src.aeroplane import Aeroplane
 
 
@@ -33,8 +34,23 @@ def test_aeroplane_comparison():
 
 def test_from_opensky_state():
     state = [
-        "abc123", "UAL1621", "United States", 123456, 123456,
-        10.5, 20.3, 10203.18, False, 268.79, 0.0, 0.0, None, None, None, False, 0
+        "abc123",
+        "UAL1621",
+        "United States",
+        123456,
+        123456,
+        10.5,
+        20.3,
+        10203.18,
+        False,
+        268.79,
+        0.0,
+        0.0,
+        None,
+        None,
+        None,
+        False,
+        0,
     ]
     plane = Aeroplane.from_opensky_state(state)
 
@@ -48,8 +64,23 @@ def test_from_opensky_state():
 
 def test_from_opensky_state_with_none():
     state = [
-        "abc123", None, "Russia", 123456, 123456,
-        None, None, None, False, None, 0.0, 0.0, None, None, None, False, 0
+        "abc123",
+        None,
+        "Russia",
+        123456,
+        123456,
+        None,
+        None,
+        None,
+        False,
+        None,
+        0.0,
+        0.0,
+        None,
+        None,
+        None,
+        False,
+        0,
     ]
     plane = Aeroplane.from_opensky_state(state)
 

@@ -1,5 +1,11 @@
+import os
+
 import requests
+from dotenv import load_dotenv
+
 from src.abstract_api import BaseAPI
+
+load_dotenv()
 
 
 class NominatimAPI(BaseAPI):
@@ -11,18 +17,18 @@ class NominatimAPI(BaseAPI):
 
     def __init__(self, timeout: int = 10):
         self.timeout = timeout
+        self.email = os.getenv("USER_EMAIL")
+        if not self.email:
+            raise ValueError("USER_EMAIL не указан в .env файле")
+        self.headers = {"User-Agent": f"AircraftTracker/1.0 ({self.email})"}
 
     def get_country_coordinates(self, country_name: str) -> dict:
         """
         Получает boundingbox страны по её названию
         """
-        params = {
-            "q": country_name,
-            "format": "json",
-            "limit": 1
-        }
+        params = {"q": country_name, "format": "json", "limit": 1}
 
-        response = requests.get(self.BASE_URL, params=params, timeout=self.timeout)
+        response = requests.get(self.BASE_URL, params=params, headers=self.headers, timeout=self.timeout)
         response.raise_for_status()
 
         data = response.json()
@@ -30,12 +36,7 @@ class NominatimAPI(BaseAPI):
             raise ValueError(f"Страна '{country_name}' не найдена")
 
         box = data[0]["boundingbox"]
-        return {
-            "south": float(box[0]),
-            "north": float(box[1]),
-            "west": float(box[2]),
-            "east": float(box[3])
-        }
+        return {"south": float(box[0]), "north": float(box[1]), "west": float(box[2]), "east": float(box[3])}
 
     def get_aircraft_in_area(self, south: float, north: float, west: float, east: float) -> list:
         """
