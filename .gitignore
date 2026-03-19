@@ -1,0 +1,34 @@
+# Byte-compiled
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.env
+.venv/
+.poetry/
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+logs/
+*.log
+
+# Reports
+report_*.txt
+
+# Data files (опционально, если не хочешь коммитить большие файлы)
+# data/*.xlsx
+# data/*.csv
+.coverage
+htmlcov/
+
+# Reports
+reports/
+report_*.json
+
+.venv
+*.json
