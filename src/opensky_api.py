@@ -1,5 +1,4 @@
 import os
-
 import requests
 from dotenv import load_dotenv
 
@@ -17,14 +16,12 @@ class OpenSkyAPI(BaseAPI):
     BASE_URL = "https://opensky-network.org/api/states/all"
 
     def __init__(self, timeout: int = 10):
-        self.timeout = timeout
-        self.username = os.getenv("OPEN_SKY_USERNAME")
-        self.password = os.getenv("OPEN_SKY_PASSWORD")
+        super().__init__(timeout)  # ← вызываем родительский __init__
+        self._username = os.getenv("OPEN_SKY_USERNAME")
+        self._password = os.getenv("OPEN_SKY_PASSWORD")
+        self._auth = (self._username, self._password) if self._username and self._password else None
 
-        # Авторизация только если есть логин и пароль
-        self.auth = (self.username, self.password) if self.username and self.password else None
-
-        if self.auth:
+        if self._auth:
             print(" OpenSky: авторизованный режим")
         else:
             print(" OpenSky: анонимный режим (10 запросов/мин)")
@@ -47,13 +44,8 @@ class OpenSkyAPI(BaseAPI):
         }
 
         try:
-            response = requests.get(
-                self.BASE_URL,
-                params=params,
-                auth=self.auth,
-                timeout=self.timeout
-            )
-            response.raise_for_status()
+            # Используем метод _connect из BaseAPI
+            response = self._connect(self.BASE_URL, params=params, auth=self._auth)
 
             data = response.json()
 

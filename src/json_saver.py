@@ -12,20 +12,20 @@ class JSONSaver(BaseSaver):
     """
 
     def __init__(self, filename: str = "data/airplanes.json"):
-        self.filename = filename
+        self._filename = filename
         self._ensure_file_exists()
 
     def _ensure_file_exists(self) -> None:
         """Создаёт файл и папку, если их нет"""
-        os.makedirs(os.path.dirname(self.filename), exist_ok=True)
-        if not os.path.exists(self.filename):
-            with open(self.filename, "w", encoding="utf-8") as f:
+        os.makedirs(os.path.dirname(self._filename), exist_ok=True)
+        if not os.path.exists(self._filename):
+            with open(self._filename, "w", encoding="utf-8") as f:
                 f.write("[]")
 
     def _load_data(self) -> List[dict]:
         """Загружает данные из JSON-файла"""
         try:
-            with open(self.filename, "r", encoding="utf-8") as f:
+            with open(self._filename, "r", encoding="utf-8") as f:
                 content = f.read().strip()
                 if not content:
                     return []
@@ -39,7 +39,7 @@ class JSONSaver(BaseSaver):
 
     def _save_data(self, data: List[dict]) -> None:
         """Сохраняет данные в JSON-файл"""
-        with open(self.filename, "w", encoding="utf-8") as f:
+        with open(self._filename, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
     def add_aeroplane(self, aeroplane: Aeroplane) -> None:
