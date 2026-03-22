@@ -1,5 +1,9 @@
-import requests
+import os
+from dotenv import load_dotenv
+
 from src.abstract_api import BaseAPI
+
+load_dotenv()
 
 
 class NominatimAPI(BaseAPI):
@@ -10,20 +14,20 @@ class NominatimAPI(BaseAPI):
     BASE_URL = "https://nominatim.openstreetmap.org/search"
 
     def __init__(self, timeout: int = 10):
-        self.timeout = timeout
+        super().__init__(timeout)  # ← вызываем родительский __init__
+        self._email = os.getenv("USER_EMAIL")
+        if not self._email:
+            raise ValueError("USER_EMAIL не указан в .env файле")
+        self._headers = {"User-Agent": f"AircraftTracker/1.0 ({self._email})"}
 
     def get_country_coordinates(self, country_name: str) -> dict:
         """
         Получает boundingbox страны по её названию
         """
-        params = {
-            "q": country_name,
-            "format": "json",
-            "limit": 1
-        }
+        params = {"q": country_name, "format": "json", "limit": 1}
 
-        response = requests.get(self.BASE_URL, params=params, timeout=self.timeout)
-        response.raise_for_status()
+        # Используем метод _connect из BaseAPI
+        response = self._connect(self.BASE_URL, params=params, headers=self._headers)
 
         data = response.json()
         if not data:
@@ -39,6 +43,6 @@ class NominatimAPI(BaseAPI):
 
     def get_aircraft_in_area(self, south: float, north: float, west: float, east: float) -> list:
         """
-        Заглушка (для совместимости с BaseAPI).
+        Заглушка (для совместимости с BaseAPI)
         """
         raise NotImplementedError("NominatimAPI не поддерживает поиск самолётов")
